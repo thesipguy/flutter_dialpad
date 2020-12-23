@@ -73,18 +73,20 @@ class _DialPadState extends State<DialPad> {
       if (i % 3 == 0 && i > 0) {
         rows.add(Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: items));
-        rows.add(SizedBox(
-          height: 12,
-        ));
+        // rows.add(SizedBox(
+        //   height: 12,
+        // ));
         items = List<Widget>();
       }
 
-      items.add(DialButton(
-        title: mainTitle[i],
-        subtitle: subTitle[i],
-        color: widget.buttonColor,
-        textColor: widget.buttonTextColor,
-        onTap: _setText,
+      items.add(Expanded(
+        child: DialButton(
+          title: mainTitle[i],
+          subtitle: subTitle[i],
+          color: widget.buttonColor,
+          textColor: widget.buttonTextColor,
+          onTap: _setText,
+        ),
       ));
     }
     //To Do: Fix this workaround for last row
@@ -127,12 +129,14 @@ class _DialPadState extends State<DialPad> {
               ),
               Expanded(
                 child: Center(
-                  child: DialButton(
-                    icon: Icons.phone,
-                    color: Colors.green,
-                    onTap: (value) {
-                      widget.makeCall(_value);
-                    },
+                  child: ClipOval(
+                    child: DialButton(
+                      icon: Icons.phone,
+                      color: Colors.green,
+                      onTap: (value) {
+                        widget.makeCall(_value);
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -242,51 +246,53 @@ class _DialButtonState extends State<DialButton>
           }
         }
       },
-      child: ClipOval(
-          child: AnimatedBuilder(
-              animation: _colorTween,
-              builder: (context, child) => Container(
-                    color: _colorTween.value,
-                    height: sizeFactor,
-                    width: sizeFactor,
-                    child: Center(
-                        child: widget.icon == null
-                            ? widget.subtitle != null
-                                ? Column(
-                                    children: <Widget>[
-                                      Padding(
-                                          padding: EdgeInsets.only(top: 8),
-                                          child: Text(
-                                            widget.title,
-                                            style: TextStyle(
-                                                fontSize: sizeFactor / 2,
-                                                color: widget.textColor != null
-                                                    ? widget.textColor
-                                                    : Colors.white),
-                                          )),
-                                      Text(widget.subtitle,
-                                          style: TextStyle(
-                                              color: widget.textColor != null
-                                                  ? widget.textColor
-                                                  : Colors.white))
-                                    ],
-                                  )
-                                : Padding(
-                                    padding: EdgeInsets.only(top: 8),
-                                    child: Text(
-                                      widget.title,
+      child: AnimatedBuilder(
+          animation: _colorTween,
+          builder: (context, child) => Container(
+                color: _colorTween.value,
+                height: sizeFactor,
+                width: sizeFactor,
+                child: Center(
+                    child: widget.icon == null
+                        ? widget.subtitle != null
+                            ? Column(
+                                children: <Widget>[
+                                  Padding(
+                                      padding: EdgeInsets.only(top: 8),
+                                      child: Text(
+                                        widget.title,
+                                        style: TextStyle(
+                                            fontSize: sizeFactor / 2,
+                                            color: widget.textColor != null
+                                                ? widget.textColor
+                                                : Colors.white),
+                                      )),
+                                  Text(widget.subtitle,
                                       style: TextStyle(
-                                          fontSize: widget.title == "*" &&
-                                                  widget.subtitle == null
-                                              ? screenSize.height * 0.0862069
-                                              : sizeFactor / 2,
                                           color: widget.textColor != null
                                               ? widget.textColor
-                                              : Colors.white),
-                                    ))
-                            : Icon(widget.icon,
-                                size: sizeFactor / 2, color: widget.iconColor != null ? widget.iconColor : Colors.white)),
-                  ))),
+                                              : Colors.white))
+                                ],
+                              )
+                            : Padding(
+                                padding: EdgeInsets.only(top: 8),
+                                child: Text(
+                                  widget.title,
+                                  style: TextStyle(
+                                      fontSize: widget.title == "*" &&
+                                              widget.subtitle == null
+                                          ? screenSize.height * 0.0862069
+                                          : sizeFactor / 2,
+                                      color: widget.textColor != null
+                                          ? widget.textColor
+                                          : Colors.white),
+                                ))
+                        : Icon(widget.icon,
+                            size: sizeFactor / 2,
+                            color: widget.iconColor != null
+                                ? widget.iconColor
+                                : Colors.white)),
+              )),
     );
   }
 }
